@@ -1,5 +1,6 @@
 import sys
 from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 from bark import SAMPLE_RATE, generate_audio, preload_models
 
 app = FastAPI()
@@ -21,4 +22,6 @@ def generate():
     print("Preloading models...")
     preload_models()
     print("Done.")
-    return generate_audio("Testing Bark!")
+    audio_array = generate_audio("Testing Bark!")
+    print("Audio array generated!!!")
+    return StreamingResponse(audio_array.tobytes(), media_type="audio/wav")
